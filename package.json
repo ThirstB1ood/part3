@@ -1,0 +1,20 @@
+{
+  "name": "phonebookbackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ecoh test",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Daniil Volkov",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "morgan": "^1.10.0"
+  }
+}
