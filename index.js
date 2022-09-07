@@ -80,7 +80,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const { name, number } = request.body
   if (!name && !number) {
     return response.status(404).json({ error: 'content missing' }).end()
@@ -107,7 +107,7 @@ app.post('/api/persons', (request, response) => {
         })
         .catch(error => next(error))
       } else {
-        person.save().then(savedPerson => response.json(savedPerson))
+        person.save().then(savedPerson => response.json(savedPerson)).catch(error => next(error))
       }
     }) 
   }
@@ -130,7 +130,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(error.name)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
