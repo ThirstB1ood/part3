@@ -7,7 +7,7 @@ const Person = require('./models/person')
 const app = express()
 app.use(express.static('build'))
 
-morgan.token('body', (request, response) => JSON.stringify(request.body) )
+morgan.token('body', (request) => JSON.stringify(request.body) )
 app.use(morgan(':method :url :status :req[content-length] - :response-time ms :body '))
 app.use(express.json())
 app.use(cors())
@@ -35,17 +35,16 @@ app.use(cors())
 //   }
 // ]
 
-app.get('/api/persons', (request, response) => {
-  // response.json(phonebook)
+app.get('/api/persons', (response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
 
-app.get('/api/info', (request, response, next) => {
+app.get('/api/info', (response, next) => {
   const date = new Date()
   Person.find({})
-    .then(result => { 
+    .then(result => {
       const persons = [...result]
       return persons.length
     })
@@ -72,7 +71,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => {
@@ -102,14 +101,14 @@ app.post('/api/persons', (request, response, next) => {
       })
       if(result.length > 0) {
         Person.findByIdAndUpdate(request.params.id, { name, number }, { new: true })
-        .then(updatedPerson => {
-          response.json(updatedPerson)
-        })
-        .catch(error => next(error))
+          .then(updatedPerson => {
+            response.json(updatedPerson)
+          })
+          .catch(error => next(error))
       } else {
         person.save().then(savedPerson => response.json(savedPerson)).catch(error => next(error))
       }
-    }) 
+    })
   }
 })
 
