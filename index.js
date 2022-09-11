@@ -35,13 +35,13 @@ app.use(cors())
 //   }
 // ]
 
-app.get('/api/persons', (response) => {
+app.get('/api/persons', (_ , response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
 
-app.get('/api/info', (response, next) => {
+app.get('/api/info', (_, response, next) => {
   const date = new Date()
   Person.find({})
     .then(result => {
